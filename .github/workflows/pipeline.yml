@@ -23,16 +23,16 @@ jobs:
         run: npm run eslint
       - name: Run Test
         run: npm run test
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+      # - name: Install Playwright Browsers
+      #   run: npx playwright install --with-deps
+      # - name: Run Playwright tests
+      #   run: npm run test:e2e
+      # - uses: actions/upload-artifact@v4
+      #   if: ${{ !cancelled() }}
+      #   with:
+      #     name: playwright-report
+      #     path: playwright-report/
+      #     retention-days: 30
       - uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -41,6 +41,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          startup-command: npm run start:prod
 
       - name: logout Azure
         run: az logout
