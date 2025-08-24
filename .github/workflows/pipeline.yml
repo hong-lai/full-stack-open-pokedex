@@ -1,5 +1,9 @@
 name: Deployment pipeline
 
+env:
+  AZURE_WEBAPP_NAME: cicd
+  AZURE_WEBAPP_PACKAGE_PATH: '.' # Set this to the path to your web app project, defatuls to the repo root
+
 on:
   push:
     branches:
@@ -29,3 +33,14 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: logout Azure
+        run: az logout
