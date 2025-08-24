@@ -2,7 +2,7 @@ name: Deployment pipeline
 
 env:
   AZURE_WEBAPP_NAME: cicd
-  # AZURE_WEBAPP_PACKAGE_PATH: '.' # Set this to the path to your web app project, defatuls to the repo root
+  AZURE_WEBAPP_PACKAGE_PATH: '.' # Set this to the path to your web app project, defatuls to the repo root
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '20'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build frontend
         run: npm run build
       - name: Check style
@@ -42,7 +42,7 @@ jobs:
       - uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          # package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           startup-command: npm run start-prod
 
       - name: logout Azure
